@@ -8,8 +8,12 @@
         "php": "^8.0.2",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^9.19",
+<<<<<<< HEAD
         "laravel/passport": "^10.4",
         "laravel/sanctum": "^2.14.1",
+=======
+        "laravel/sanctum": "^3.0",
+>>>>>>> 74dfb6cec4d2c1f6d7e1a1e29e4bc9d610dc7031
         "laravel/tinker": "^2.7"
     },
     "require-dev": {
@@ -57,7 +61,10 @@
     "config": {
         "optimize-autoloader": true,
         "preferred-install": "dist",
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
     },
     "minimum-stability": "dev",
     "prefer-stable": true
