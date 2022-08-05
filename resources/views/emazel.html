@@ -1,0 +1,628 @@
+{{ header }}{{ column_left }}
+
+<style>
+.toolbar {
+    float:right;
+}
+
+.modalth{
+  font-weight: normal;
+}
+table thead{
+font-weight:normal;
+color:white;
+}
+
+</style>
+
+<main class="page-content">
+	<!---Add New Designation Start-->
+	
+	<!--Error message-->
+	<div id="error" class="alert border-0 bg-light-danger alert-dismissible fade show py-2" style="display:none;" >
+        	<div class="d-flex align-items-center">
+                	<div class="fs-3 text-danger"><i class="bi bi-x-circle-fill"></i>
+                      	</div>
+                      	<div class="ms-3">
+                        	<div class="text-danger">Check Designation Name and Company Name already exists.</div>
+                      	</div>
+                </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+	<!--End Error message-->	
+	
+		<div class="card">       
+			<div class="collapse" id="collapseAdd">       	
+        			<div class="card card-header" >
+	     				<h6 class="mb-0 text-uppercase" style= "margin-top: 8px; position: absolute;">{{ text_add_new_designation }}</h6>  
+     	 				<div class ="hide" align="right" ><button class="btn btn-outline-primary px-5" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAdd" aria-expanded="false" aria-controls="collapseAdd" ><i class="fadeIn animated bx bx-book"></i>Hide</button></div>
+       				</div>
+       				<div class="card card-body">
+         				<div class="p-4 border rounded">
+      	   					<form class="row g-3" id="form-designation" method="post" enctype="multipart/form-data">
+      	   					
+							<div class="col-md-4">
+								<div class="field-wrapperr">
+		      			  				<input type="text" class="form-control" id="designation" name="designation"  required>
+									<div class="field-placeholder" >{{ text_designation }}</div>
+								</div>
+							</div>	     	   					
+      	   					
+ 							<div class="col-md-4">
+ 								<div class="field-wrapperr">
+     						  		<select class="single-select" id="company_name" name="company_name" aria-label="Floating label select example">
+  						  			<option value="">Select Company</option> 
+									{% for company in companies %}
+  						  			<option value={{ company.company_id }}>{{ company.company_name }}</option> 
+  						  			{% endfor %}
+  						  			</select>
+ 									<div class="field-placeholder" >{{ text_company_name }}</div>
+ 								</div>
+							</div>	
+							<div class="col-md-4">
+								<div class="field-wrapperr">
+     									<select class="single-select" id="department_name" name="department_name" aria-label="Floating label select example" required>
+									{% for department in departments %}
+								  	<option value={{ department.department_id }}>{{ department.department }}</option> 
+								  	{% endfor %}
+  						  			</select>
+									<div class="field-placeholder" >{{ text_department_name }}</div>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="field-wrapperr">
+     									<select class="single-select" id="region_id" name="region_id" aria-label="Floating label select example" required>
+									
+  						  				</select>
+									<div class="field-placeholder" >{{ text_region_name }}</div>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="field-wrapperr">
+     									<select class="single-select" id="location_id" name="location_id" aria-label="Floating label select example" required>
+									
+  						  			</select>
+									<div class="field-placeholder" >{{ text_location_name }}</div>
+								</div>
+							</div>							
+ 							<div class="col-md-4">
+ 								<div class="field-wrapperr">
+      									<select class="single-select" id="work_group" name="work_group" aria-label="Floating label select example" required>
+									{% for workgroup in workgroups %}
+								  	<option value={{ workgroup.workgroup_id }}>{{ workgroup.workgroup }}</option> 
+								  	{% endfor %}
+  						  			</select>
+ 									<div class="field-placeholder" >{{ text_work_group }}</div>
+ 								</div>
+							</div>
+				      		      		
+       					</div>      
+     				</div>
+     					<div class="card card-footer">
+     						<div align="right"><button type="submit" class="btn btn-sm btn-primary px-5"><i class="fadeIn animated bx bx-save"></i>{{ text_save }}</button></div>     
+     					</div>
+     						</form> 
+	</div>
+	<!---Add New Designation End-->
+
+	<!--List All Designation Start-->
+
+
+		<h6 class="mb-0 text-uppercase" style="margin-left: 16px; margin-top: 18px;">{{ text_list_all_designation }}</h6>
+		<form action="{{ designation_exportXlsx }}" id="form-opportunity" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+			<div class="font-22" style="text-align:right; margin-right: 16px; margin-top: -23px;"><button type="submit" class="btn btn-primary"><i class="fadeIn animated bx bx-download" style ="margin-right:5px;"> Export</button></i></div>
+		</form>		
+		<hr/>
+	 	<div class="card">
+	 		<div class="card-body">
+	 			<div class="table-responsive">
+					<!--Error message-->
+					<div id="designation_error" class="alert border-0 bg-light-danger alert-dismissible fade show py-2" style="display:none;" >
+					    <div class="d-flex align-items-center">
+					      <div class="fs-3 text-danger"><i class="bi bi-x-circle-fill"></i>
+					      </div>
+					      <div class="ms-3">
+						<div class="text-danger">Designation Data Exists !</div>
+					      </div>
+					    </div>
+					    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+					  </div>
+					<!--End Error message-->	 			
+	 				<table id="list_designation" class="table table-striped table-bordered">
+	 					<thead class="color-table bg-primary">
+	 						<tr>
+							<th class="fw-normal">{{ text_heading_title }}</th>
+							<th class="fw-normal">{{ text_department_name }}</th>
+							<th class="fw-normal">{{ text_company_name }}</th>
+							<th class="fw-normal">{{ text_work_group }}</th>								
+							<th class="fw-normal">{{ text_action }}</th>
+	 						</tr>
+	 					</thead>
+	 					<tbody>
+	 						{% for designation in designations %}
+	 						<tr>
+	 							<td>{{ designation.designation|length > 20 ? designation.designation|slice(0,20) ~ '...' : designation.designation }}</td>								
+								<td>{{ designation.department }}</td> 
+								<td>{{ designation.company_name|length > 20 ? designation.company_name|slice(0, 22) ~ '...' : designation.company_name}}</td>
+								<td>{{ designation.workgroup }}</td>																	 							         
+	 							<td>
+	 							<a id="action1" style="cursor:pointer;" onclick="return edit({{ designation.designation_id }})" data-bs-toggle="modal" class="edit-card" data-bs-target="#editDesignation" data-bs-toggle="tooltip" title="Edit"><i class="fadeIn animated bx bxs-edit bx-xs"></i></a>&nbsp;&nbsp;
+	 							<a id="action2" style="cursor:pointer;" onclick="return view({{ designation.designation_id }})" data-bs-toggle="modal" data-bs-target="#viewDesignation" data-bs-toggle="tooltip" title="View"><i class="fadeIn animated bx bxs-show bx-xs"></i></a>&nbsp;&nbsp;
+	 							<a id="action3" style="cursor:pointer;" onclick="deletedesignation({{ designation.designation_id }})" data-bs-toggle="tooltip" title="Delete"><i class="fadeIn animated bx bxs-trash bx-xs text-danger"></i></a>
+		 						</td>
+	 						</tr>
+	 						{% endfor %}
+                                          	</tbody>
+                                      </table>   							
+	<!--Edit Modal-->							
+	<div class="modal fade" id="editDesignation" aria-hidden="true">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">{{ text_edit_designation }}</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+			<div class="modal-body">	
+
+				<!--Error message-->
+				<div id="edit_error" class="alert border-0 bg-light-danger alert-dismissible fade show py-2" style="display:none;" >
+					<div class="d-flex align-items-center">
+						<div class="fs-3 text-danger"><i class="bi bi-x-circle-fill"></i>
+						</div>
+						<div class="ms-3">
+							<div class="text-danger">Check Designation Name and Company Name already exists.</div>
+						</div>
+					</div>
+					    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+				</div>
+				<!--End Error message-->
+	
+				<div class="card card-body">										      
+					<div class="p-4 border rounded">										      	  
+						<form class="row g-3" id="form-designation-edit" method="post" enctype="multipart/form-data">
+						
+							<div class="col-md-4">
+								<div class="field-wrapperr">
+		      							<input type="hidden" class="form-control" id="designation_id_edit" name="designation_id_edit">		      													
+		      							<input type="text" class="form-control" id="designation_edit" name="designation_edit" placeholder="Designation">
+									<div class="field-placeholder" >{{ text_designation }}</div>
+								</div>
+							</div>						
+						
+ 							<div class="col-md-4">
+ 								<div class="field-wrapperr">
+     									<select class="single-select" id="company_name_edit" name="company_name_edit" aria-label="Floating label select example">
+  									{% for company in companies %}
+  									<option value={{ company.company_id }}>{{ company.company_name }}</option> 
+  									{% endfor %}
+  									</select>
+ 									<div class="field-placeholder" >{{ text_company_name }}</div>
+ 								</div>
+							</div>
+ 							<div class="col-md-4">
+								<div class="field-wrapperr">
+      									<select class="single-select" id="department_name_edit" name="department_name_edit" aria-label="Floating label select example">
+									{% for department in departments %}
+										<option value={{ department.department_id }} selected>{{ department.department }}</option>
+									{% endfor %}
+  									</select>
+									<div class="field-placeholder" >{{ text_department_name }}</div>
+								</div>
+							</div>  
+							<div class="col-md-4">
+								<div class="field-wrapperr">
+     									<select class="single-select" id="region_id_edit" name="region_id_edit" aria-label="Floating label select example" required>
+									{% for region in regions %}
+								  	<option value={{ region.region_id }}>{{ region.region_name }}</option> 
+								  	{% endfor %}
+  						  			</select>
+									<div class="field-placeholder" >{{ text_region_name }}</div>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="field-wrapperr">
+     									<select class="single-select" id="location_id_edit" name="location_id_edit" aria-label="Floating label select example" required>
+									{% for location in locations %}
+								  	<option value={{ location.location_id }}>{{ location.location_name }}</option> 
+								  	{% endfor %}
+  						  			</select>
+									<div class="field-placeholder" >{{ text_location_name }}</div>
+								</div>
+							</div>							
+							<div class="col-md-4">
+								<div class="field-wrapperr">
+      									<select class="single-select" id="work_group_edit" name="work_group_edit" aria-label="Floating label select example">
+									{% for workgroup in workgroups %}
+										<option value={{ workgroup.workgroup_id }} selected>{{ workgroup.workgroup }}</option> 
+									{% endfor %}
+  									</select>
+									<div class="field-placeholder" >{{ text_work_group }}</div>
+								</div>
+							</div>
+     																				      												      		             												    	    
+						</div>      
+					</div>  										
+				</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ text_close }}</button>
+								<button type="submit" class="btn btn-primary" id="update_department" name="update_department">{{ text_update }}</button>
+							</div>
+						</form> 
+			</div>										
+		</div>
+	</div>
+	<!--Edit modal end-->
+	 							
+	<!--view modal start-->
+	<div class="modal fade" id="viewDesignation" tabindex="-1" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">{{ text_view_designation }}</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">									 			
+					<div class="card">
+						<div class="card-body">
+							<table class="table mb-0 table-striped">
+								<tbody>
+									<tr>
+										<th class="modalth">{{ text_designation }}</th>
+										<td><div id="designation_view"></div></td>												 		      
+									</tr>
+									<tr>
+										<th class="modalth">{{ text_company_name }}</th>
+										<td><div id="company_name_view"></div></td>
+									</tr>
+									<tr>
+										<th class="modalth">{{ text_department_name }}</th>
+										<td><div id="department_name_view"></div></td>												 		    
+									</tr>
+									<tr>
+										<th class="modalth">{{ text_region_name }}</th>
+										<td><div id="region_name_view"></div></td>
+									</tr>
+									<tr>
+										<th class="modalth">{{ text_location_name }}</th>
+										<td><div id="location_name_view"></div></td>												 		    
+									</tr>									
+									<tr>
+										<th class="modalth">{{ text_work_group }}</th>
+										<td><div id="work_group_view"></div></td> 												 		     
+									</tr>												 		    													 		    		
+								</tbody>
+							</table>
+						</div>
+					</div> 					 												 			    									 			      									 			
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ text_close }}</button> 									 			
+				</div>
+				</div>
+			</div>
+		</div>
+	</div>							             							        						      								          								        
+	<!--view modal end-->
+	<!--deletemodal start-->
+	<div class="modal fade" id="deleteDesignation" tabindex="-1" aria-labelledby="deleteDesignation" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content" >
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">{{ text_confirm }}</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">{{ text_delete_confirm_message }}</div>
+					<div class="modal-footer">
+						<button id="delete_no" type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ text_close }}</button>
+						<button id="delete_yes" type="button" class="btn btn-primary">{{ text_yes }}</button>												
+					</div>
+				</div>
+			</div>
+		</div>	 						       	 						       
+	<!--deletemodal end-->							       								                        															
+
+			</div>
+		</div>
+        </div>
+	<!--List All Designation End-->
+</main>
+
+{{ footer }}
+
+<script>
+	$(document).ready(function() {
+        		$('#list_designation').DataTable({
+        		"dom": '<"toolbar">frtip',
+        		initComplete: function(){
+	     		 $("div.toolbar")
+	         	.html('<button class="btn btn-outline-primary px-5" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAdd" aria-expanded="false" aria-controls="collapseAdd"><i class="fadeIn animated bx bx-book-add"></i>Add New</button>');           
+   			}  
+        		});  
+ 		}); 
+</script>
+
+
+<script>
+	$(document).ready(function() {
+		
+		 $("#company_name_edit").select2({
+		    dropdownParent: $("#editDesignation")
+ 		 });
+ 		 
+ 		 $("#department_name_edit").select2({
+ 		    dropdownParent: $("#editDesignation")
+  		 });
+  		 
+  		 $("#work_group_edit").select2({
+ 		   dropdownParent: $("#editDesignation")
+		 });
+		 
+  		 $("#region_id_edit").select2({
+ 		   dropdownParent: $("#editDesignation")
+		 });
+		 
+  		 $("#location_id_edit").select2({
+ 		   dropdownParent: $("#editDesignation")
+		 });		 
+	});
+</script>
+
+
+<script type="text/javascript">	
+	$(function () {    
+        	$('#form-designation').on('submit', function (e) {
+           	event.preventDefault();
+    		$.ajax({
+            		url: 'index.php?route=hrms/admin/organization/designation/saveDesignation',
+	    		type: 'post',
+	    		dataType: 'json',
+            		data: $('#form-designation').serialize(),
+            		success: function (json) {            	 	       
+   				console.log(json);
+				if(json['error']){								
+					$('#error').show().delay(5000).fadeOut();								
+				}   				
+              			if(json['success']){
+              			$('#alert-success').append('<div class="alert alert-success alert-dismissible fade show" role="alert"><i class="fa fa-exclamation-circle"></i>Success: You have modified Designation<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
+              	 		location.reload();
+	      				}	     
+            			}
+          		});
+        	});
+      	});
+</script>
+
+<script>    
+	function edit(data){    
+    		$.ajax({ 
+			url: 'index.php?route=hrms/admin/organization/designation/editDesignation',
+		    	type: 'post',
+		    	dataType: 'json',
+	            	data: {designation_id :data},
+	            	success: function (json) {
+	            		console.log(json);
+	              		if(json['designation_data']){
+					$('#designation_id_edit').val(json['designation_data']['designation_id']);
+				        $('#designation_edit').val(json['designation_data']['designation']);
+				        $('#company_name_edit').val(json['designation_data']['company_id']);
+				        $('#department_name_edit').val(json['designation_data']['department_id']);
+				        $('#region_id_edit').val(json['designation_data']['region_id']);
+				        $('#location_id_edit').val(json['designation_data']['location_id']);
+				        $('#work_group_edit').val(json['designation_data']['workgroup_id']);
+				        $('#company_name_edit').trigger('change');
+				        $('#department_name_edit').trigger('change');
+				        $('#work_group_edit').trigger('change');
+				        $('#region_id_edit').trigger('change');
+				        $('#location_id_edit').trigger('change');
+              			}              		             	                  		             		              		              		
+	            	}
+		});           
+	}
+</script>
+
+	<script type="text/javascript">	
+	$(function () {   
+        	$('#form-designation-edit').on('submit', function (e) {
+           	event.preventDefault();
+      			$.ajax({
+            			url: 'index.php?route=hrms/admin/organization/designation/saveDesignation',
+	    			type: 'post',
+	    			dataType: 'json',
+            			data: $('#form-designation-edit').serialize(),
+            			success: function (json) {           	 
+   					console.log(json);
+   					  					
+              				if(json['success']){
+              					$('#alert-success').append('<div class="alert alert-success alert-dismissible fade show" role="alert"><i class="fa fa-exclamation-circle"></i>Success: You have modified Designation<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
+              	 				location.reload();
+	      				}
+					if(json['error'] == false){								
+						$('#edit_error').show().delay(5000).fadeOut();	
+						
+					} 	      				
+            			}
+          		});
+        	});
+      	});
+</script>
+
+<!--Edit-->
+<script>    
+	function view(data){
+    		$.ajax({  
+	        	url: 'index.php?route=hrms/admin/organization/designation/viewDesignation',
+		    	type: 'post',
+		    	dataType: 'json',
+	            	data: {designation_id :data},
+	            	success: function (json) {
+	            		console.log(json);
+	              		if(json['designation_data']){				         
+				         $('#designation_view').text(json['designation_data']['designation']);
+				         $('#company_name_view').text(json['designation_data']['company_name']);
+				         $('#department_name_view').text(json['designation_data']['department']);
+				         $('#region_name_view').text(json['designation_data']['region_name']);
+				         $('#location_name_view').text(json['designation_data']['location_name']);
+				         $('#work_group_view').text(json['designation_data']['workgroup']);				         
+              			}
+  			}             	
+          	});            
+    	}
+</script>
+<!--End Edit-->
+<!--delete-->
+<script> 
+	function deletedesignation(data){
+      		$('#deleteDesignation').modal('show');      
+      			var modalConfirm = function(callback){              
+       				$("#delete_yes").on("click", function(){
+          				callback(true);
+          				$("#deleteDesignation").modal('hide');
+        			});
+        	
+        			$("#delete_no").on("click", function(){
+          				callback(false);
+          				$("#deleteDesignation").modal('hide');
+        			});
+      			};      
+      		modalConfirm(function(confirm){
+        		if(confirm){
+              			$.ajax({
+	      	            		url: 'index.php?route=hrms/admin/organization/designation/deleteDesignation',
+	      		    		type: 'post',
+	      		    		dataType: 'json',
+	      	            		data: {designation_id :data},
+	      	            		success: function (json) {
+	      	            		console.log(json);
+					if (json['status']=='record exits') {		    	
+						$('#designation_error').show().delay(5000).fadeOut();     
+
+					}       	      	            		
+		            			location.reload();
+	            	    		}
+	      			});       
+        		}
+		});         	
+	}
+</script>
+<!--delete-->
+
+<!--region-->
+<script>
+	$('#region_id').on('change', function(){	
+		 var id = this.value;		
+		 console.log(id);	
+		  $.ajax({
+			url: 'index.php?route=hrms/admin/organization/designation/getlocationId',
+			type: 'post',
+			dataType: 'json',
+			data: {region_id :id},			
+			success: function (json)
+			{
+				//console.log(json);
+				var toAppend = "";
+			   		document.getElementById("location_id").options.length = 0;
+			   		for(var i=0;i<json['locations'].length;i++){
+			   	    	toAppend +='<option value='+json['locations'][i]['location_id']+' >'+json['locations'][i]['location_name']+'</option>';				    
+					}
+				        $('#location_id').append(toAppend);  			
+				  
+			}	
+		});
+		
+	});
+</script>
+<!--end region-->
+
+<!--Company Start-->
+<script>
+	$('#company_name').on('change',function(){
+		var id = this.value;
+		//console.log(id);
+
+		$.ajax({
+			url: 'index.php?route=hrms/admin/organization/designation/getRegionsId',
+			type: 'post',
+			dataType: 'json',
+			data: {companyids :id},			
+			success: function (json)
+			{
+				console.log(json);
+				var toAppend = "";
+			   		document.getElementById("region_id").options.length = 0;
+			   		for(var i=0;i<json['regions'].length;i++){
+			   	    	toAppend +='<option value='+json['regions'][i]['region_id']+' >'+json['regions'][i]['region_name']+'</option>';				    
+					}
+				        $('#region_id').append(toAppend);  
+			}
+		});
+
+		$.ajax({
+			url: 'index.php?route=hrms/admin/organization/designation/getDepartmentWorkgroup',
+			type: 'post',
+			dataType: 'json',
+			data: {company_id :id},			
+			success: function (json) {
+					var toAppend = "";
+			   		document.getElementById("department_name").options.length = 0;
+			   		for(var i=0;i<json['departments'].length;i++){
+			   	    	toAppend +='<option value='+json['departments'][i]['department_id']+' >'+json['departments'][i]['department']+'</option>';				    
+					}
+				        $('#department_name').append(toAppend);   
+					var toAppend = "";
+			   		document.getElementById("work_group").options.length = 0;
+			   		for(var i=0;i<json['workgroups'].length;i++){
+			   	    	toAppend +='<option value='+json['workgroups'][i]['workgroup_id']+' >'+json['workgroups'][i]['workgroup']+'</option>';				    
+					}
+				        $('#work_group').append(toAppend); 				
+					}
+         	 });
+	});
+</script>
+<!--end Company-->
+
+<!--Edit Company Start-->
+<script>
+	$('#company_name_edit').on('change',function(){
+					var id = this.value;
+					$.ajax({
+							url: 'index.php?route=hrms/admin/organization/designation/getRegionsId',
+							type: 'post',
+							dataType: 'json',
+							data: {companyids :id},			
+							success: function (json)
+							{
+								console.log(json);
+								var toAppend = "";
+									document.getElementById("region_id").options.length = 0;
+									for(var i=0;i<json['regions'].length;i++){
+										toAppend +='<option value='+json['regions'][i]['region_id_edit']+' >'+json['regions'][i]['region_name_edit']+'</option>';				    
+									}
+										$('#region_id').append(toAppend);  
+							}
+						});
+
+						$.ajax({
+			 				url: 'index.php?route=hrms/admin/organization/designation/getDepartmentWorkgroupEdit',
+			 				type: 'post',
+			 				dataType: 'json',
+			 				data: {company_id :id},			
+			 				success: function (json) {
+			   				var toAppend = "";
+			   				document.getElementById("department_name_edit").options.length = 0;
+			   				for(var i=0;i<json['departments'].length;i++){
+			   	    			toAppend +='<option value='+json['departments'][i]['department_id']+' >'+json['departments'][i]['department']+'</option>';				    
+							}
+				            		$('#department_name_edit').append(toAppend);
+
+							var toAppend = "";
+			   				document.getElementById("work_group_edit").options.length = 0;
+			   				for(var i=0;i<json['workgroups'].length;i++){
+			   	    			toAppend +='<option value='+json['workgroups'][i]['workgroup_id']+' >'+json['workgroups'][i]['workgroup']+'</option>';				    
+							}
+				            	$('#work_group_edit').append(toAppend); 				
+
+		   					}
+         	 				});
+		});
+</script>
+<!--End Edit Company Start-->
