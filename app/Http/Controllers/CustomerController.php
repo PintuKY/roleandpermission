@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Customers;
+use App\Models\User;
 use App\Http\Requests\StoreCustomerRequest;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class CustomerController extends Controller
 {
@@ -19,6 +22,11 @@ class CustomerController extends Controller
     public function CustomerForm()
     {
 
+        Log::info(auth()->user());
+        if(!auth()->user()->can('insert')) {
+            abort(403, "Unauthorized access");
+        }
+
         return view('/add_customer');
     }
 
@@ -26,21 +34,22 @@ class CustomerController extends Controller
     {        
 
        // Customers::create($request->only("first_name", "last_name", "phone","address1","address2","city","landmakr","post_office","pincode","country","state"));
-
-        $data= new Customers();
-        $data->first_name = $request->input('first_name');
-        $data->last_name  = $request->input('last_name');
-        $data->phone      = $request->input('phone');
-        $data->address1   = $request->input('address1');
-        $data->address2   = $request->input('address2');
-        $data->city       = $request->input('city');
-        $data->landmakr   = $request->input('landmakr');
-        $data->post_office= $request->input('post_office');
-        $data->pincode    = $request->input('pincode');
-        $data->country    = $request->input('country');
-        $data->state      = $request->input('state');
-        $data->save();
-        return redirect()->back()->with('status', 'Customer Add.! ');
+       
+            $data= new Customers();
+            $data->first_name = $request->input('first_name');
+            $data->last_name  = $request->input('last_name');
+            $data->phone      = $request->input('phone');
+            $data->address1   = $request->input('address1');
+            $data->address2   = $request->input('address2');
+            $data->city       = $request->input('city');
+            $data->landmakr   = $request->input('landmakr');
+            $data->post_office= $request->input('post_office');
+            $data->pincode    = $request->input('pincode');
+            $data->country    = $request->input('country');
+            $data->state      = $request->input('state');
+            $data->save();
+            return redirect()->back()->with('status', 'Customer Add.! ');
+        
     }
 
 

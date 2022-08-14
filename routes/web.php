@@ -18,19 +18,25 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+// Route::group(['prefix'=>'admin'], function(){
+
+//     Route::middleware([SuperAdmin::class])->group(function () {
+
+//         Route::get('customers/form',[CustomerController::class,'CustomerForm']);
+        
+//     });
+// });
+
 Route::get('customers',[CustomerController::class,'index']);
-Route::get('customers/form',[CustomerController::class,'CustomerForm'])->middleware(['auth'])->name('customers/form');
+Route::get('customers/form',[CustomerController::class,'CustomerForm']);
 Route::POST('customer/add',[CustomerController::class,'AddCustomer']);
 Route::get('customer/edit/{id}',[CustomerController::class,'Edit']);
-Route::POST('customer/update/{customer_id}',[CustomerController::class,'Update'])->middleware(['auth'])->name('customer/update');
+Route::POST('customer/update/{customer_id}',[CustomerController::class,'Update']);
 Route::get('customer/view/{customer_id}',[CustomerController::class,'View']);
-Route::get('customer/delete/{customer_id}',[CustomerController::class,'Delete'])->middleware(['auth'])->name('customer/update');
+Route::get('customer/delete/{customer_id}',[CustomerController::class,'Delete']);
 
-
-
-
-// Route::get('/dashboard', function () {
-//     return view('dashboard');
-// })->middleware(['auth'])->name('dashboard');
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth'])->name('dashboard');
 
 require __DIR__.'/auth.php';
