@@ -32,6 +32,6 @@ class RoleAssign extends Seeder
 
         $stpermission = Permission::where('name','view')->get();
         $strole= Role::where('name','Student')->first();
-        $strole->syncPermissions($stpermission);   
+        $strole->syncPermissions($stpermission);
     }
 }

@@ -22,7 +22,8 @@ class InsertRoll extends Seeder
     public function run()
     {
 
-        $arr = ['Admin','Employee','Student'];
+        // $arr = ['SuperAdmin','Admin','Employee','Student'];
+        $arr = ['SuperAdmin'];
         foreach($arr as $roll){
 
             Role::create(['name' => $roll]);

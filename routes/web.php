@@ -28,7 +28,7 @@ Route::get('/', function () {
 // });
 
 Route::get('customers',[CustomerController::class,'index']);
-Route::get('customers/form',[CustomerController::class,'CustomerForm']);
+Route::get('customers/form',[CustomerController::class,'CustomerForm'])->middleware(['auth'])->name('customers/form');
 Route::POST('customer/add',[CustomerController::class,'AddCustomer']);
 Route::get('customer/edit/{id}',[CustomerController::class,'Edit']);
 Route::POST('customer/update/{customer_id}',[CustomerController::class,'Update']);

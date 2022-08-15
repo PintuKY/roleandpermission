@@ -58,6 +58,10 @@ class CustomerController extends Controller
 
     public function Edit($id){
 
+        Log::info(auth()->user());
+        if(!auth()->user()->can('edit')) {
+            abort(403, "Unauthorized access");
+        }
         //$data= Customers::find($id);
         $data = Customers::where("id", $id)->first();
         return view('/customer_edit',['data'=>$data]);
@@ -70,6 +74,7 @@ class CustomerController extends Controller
      */
     public function Update(Request $request ,$customer_id){
 
+        
         $data = Customers::where("id", $customer_id)->first();
         $data->first_name=$request->input('edit_first_name');
         $data->last_name=$request->input('edit_last_name');
@@ -86,6 +91,11 @@ class CustomerController extends Controller
         return redirect('/customers');
     }
     public function View($customer_id){
+
+        Log::info(auth()->user());
+        if(!auth()->user()->can('view')) {
+            abort(403, "Unauthorized access");
+        }
 
         $data= Customers::find($customer_id);
     //  $data = Customers::where("id", $id)->first();
