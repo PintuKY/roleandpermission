@@ -16,16 +16,16 @@ class CustomerController extends Controller
     {
 
         $customer_list = Customers::paginate(1);
-        return view('/customer',compact('customer_list') );
+        return view('customer',compact('customer_list'));
     }
 
     public function CustomerForm()
     {
 
-        Log::info(auth()->user());
-        if(!auth()->user()->can('insert')) {
-            abort(403, "Unauthorized access");
-        }
+        // Log::info(auth()->user());
+        // if(!auth()->user()->can('insert')) {
+        //     abort(403, "Unauthorized access");
+        // }
 
         return view('/add_customer');
     }
@@ -58,10 +58,10 @@ class CustomerController extends Controller
 
     public function Edit($id){
 
-        Log::info(auth()->user());
-        if(!auth()->user()->can('edit')) {
-            abort(403, "Unauthorized access");
-        }
+        // Log::info(auth()->user());
+        // if(!auth()->user()->can('edit')) {
+        //     abort(403, "Unauthorized access");
+        // }
         //$data= Customers::find($id);
         $data = Customers::where("id", $id)->first();
         return view('/customer_edit',['data'=>$data]);
@@ -92,10 +92,10 @@ class CustomerController extends Controller
     }
     public function View($customer_id){
 
-        Log::info(auth()->user());
-        if(!auth()->user()->can('view')) {
-            abort(403, "Unauthorized access");
-        }
+        // Log::info(auth()->user());
+        // if(!auth()->user()->can('view')) {
+        //     abort(403, "Unauthorized access");
+        // }
 
         $data= Customers::find($customer_id);
     //  $data = Customers::where("id", $id)->first();

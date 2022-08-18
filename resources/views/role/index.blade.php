@@ -16,23 +16,28 @@
 
     <div class="container" style="margin-top:70px;">
         <div class="card">
-            @if (session('status'))
+            {{-- @if (session('status'))
             <div class="alert alert-success">
                 {{ session('status') }}
             </div>
+            @endif --}}
+            @if($message = Session::get('success'))
+                <div class="alert alert-success">
+                    <p>{{ $message }}</p>
+                </div>
             @endif
             @if (session('delete'))
-            <div class="alert alert-success">
-                {{ session('delete') }}
-            </div>
-            @endif            
+                <div class="alert alert-success">
+                    {{ session('delete') }}
+                </div>
+            @endif
             <div class="card-header">
                 <!-- Button trigger modal -->
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" style="float: right;">
-                   <a href="/customers/form" style="color: white;"> Add New Customer</a>
+                   <a href="/role/form" style="color: white;"> Add New Role</a>
                 </button>
                 <div class="card-title">
-                    <h3>List Customers</h3>
+                    <h3>List Role</h3>
                 </div>
             </div>
             <div class="card-body">
@@ -40,30 +45,20 @@
                     <thead class="thead-dark">
                         <tr>
                             <th scope="col">ID</th>
-                            <th scope="col">First NAme</th>
-                            <th scope="col">Phone</th>
-                            <th scope="col">Address1</th>
-                            <th scope="col">Pin Code</th>
-                            <th scope="col">Country</th>
-                            <th scope="col">State</th>
+                            <th scope="col">Role name</th>
                             <th scope="col">Action</th>
 
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($customer_list as $customer)
+                        @foreach ($role as $roles)
                         <tr>
-                            <th scope="row">{{$customer->id}}</th>
-                            <td>{{$customer->first_name}}</td>
-                            <td>{{$customer->phone}}</td>
-                            <td>{{$customer->address1}}</td>
-                            <td>{{$customer->pincode}}</td>
-                            <td>{{$customer->country}}</td>
-                            <td>{{$customer->state}}</td>
+                            <th scope="row">{{$roles->id}}</th>
+                            <td>{{$roles->name}}</td>
                             <td>
-                                <a href="/customer/edit/{{ $customer->id}}"><i class="btn btn-success" style="height: 28px; margin-bottom: 3px; width: 58px; padding: 2px;">edit</i></a>&nbsp;&nbsp;
-                                <a href="/customer/view/{{ $customer->id}}"><i class="btn btn-info" style="height: 28px; margin-bottom: 3px; width: 58px; padding: 2px;">view</i></a>&nbsp;&nbsp;
-                                <a href="/customer/delete/{{ $customer->id}}"><i class="btn btn-danger" style="height: 28px; margin-bottom: 3px; width: 58px; padding: 2px;">delete</i></a>
+                                <a href="/role/edit/{{ $roles->id }}"><i class="btn btn-success" style="height: 28px; margin-bottom: 3px; width: 58px; padding: 2px;">edit</i></a>&nbsp;&nbsp;
+                                <a href="/role/show/{{ $roles->id }}"><i class="btn btn-info" style="height: 28px; margin-bottom: 3px; width: 58px; padding: 2px;">view</i></a>&nbsp;&nbsp;
+                                <a href="/delete/{{ $roles->id }}"><i class="btn btn-danger" style="height: 28px; margin-bottom: 3px; width: 58px; padding: 2px;">delete</i></a>
 							</td>
                             </tr>
                         @endforeach
@@ -72,7 +67,7 @@
             </div>
         </div>
         <div class="pagination">
-            {!! $customer_list->links() !!}
+            {!! $role->links() !!}
         </div>
         
     </div>

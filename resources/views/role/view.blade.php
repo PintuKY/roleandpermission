@@ -12,8 +12,6 @@
 </head>
 
 <body>
-    <!--Add Customer Modal -->
-
     <div class="container" style="margin-top:70px;">
         <div class="card">
             @if (session('status'))
@@ -21,62 +19,43 @@
                 {{ session('status') }}
             </div>
             @endif
-            @if (session('delete'))
-            <div class="alert alert-success">
-                {{ session('delete') }}
-            </div>
-            @endif            
             <div class="card-header">
                 <!-- Button trigger modal -->
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" style="float: right;">
-                   <a href="/customers/form" style="color: white;"> Add New Customer</a>
-                </button>
+                    <a href="/role/list" style="color: white;"> Back Role List</a>
+                 </button>
                 <div class="card-title">
-                    <h3>List Customers</h3>
+                    <h3>Role And Permission</h3>
                 </div>
             </div>
             <div class="card-body">
-                <table class="table">
-                    <thead class="thead-dark">
-                        <tr>
-                            <th scope="col">ID</th>
-                            <th scope="col">First NAme</th>
-                            <th scope="col">Phone</th>
-                            <th scope="col">Address1</th>
-                            <th scope="col">Pin Code</th>
-                            <th scope="col">Country</th>
-                            <th scope="col">State</th>
-                            <th scope="col">Action</th>
-
-                        </tr>
-                    </thead>
+                <table class="table mb-0 table-striped">
                     <tbody>
-                        @foreach ($customer_list as $customer)
                         <tr>
-                            <th scope="row">{{$customer->id}}</th>
-                            <td>{{$customer->first_name}}</td>
-                            <td>{{$customer->phone}}</td>
-                            <td>{{$customer->address1}}</td>
-                            <td>{{$customer->pincode}}</td>
-                            <td>{{$customer->country}}</td>
-                            <td>{{$customer->state}}</td>
+                            <th class="modalth">ID</th>
                             <td>
-                                <a href="/customer/edit/{{ $customer->id}}"><i class="btn btn-success" style="height: 28px; margin-bottom: 3px; width: 58px; padding: 2px;">edit</i></a>&nbsp;&nbsp;
-                                <a href="/customer/view/{{ $customer->id}}"><i class="btn btn-info" style="height: 28px; margin-bottom: 3px; width: 58px; padding: 2px;">view</i></a>&nbsp;&nbsp;
-                                <a href="/customer/delete/{{ $customer->id}}"><i class="btn btn-danger" style="height: 28px; margin-bottom: 3px; width: 58px; padding: 2px;">delete</i></a>
-							</td>
-                            </tr>
-                        @endforeach
+                                <div id="designation_view">{{ $role->id}}</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="modalth">Role Name</th>
+                            <td>
+                                <div id="company_name_view">{{ $role->name}}</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="modalth">Permission</th>
+                            @foreach($rolePermissions as $value)
+                            <td>
+                                <div id="region_name_view">{{ $value->name}}</div>
+                            </td>
+                            @endforeach
+                        </tr>                     
                     </tbody>
                 </table>
             </div>
         </div>
-        <div class="pagination">
-            {!! $customer_list->links() !!}
-        </div>
-        
     </div>
-
     <!-- JavaScript Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
@@ -88,5 +67,25 @@
     <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js" integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+" crossorigin="anonymous"></script>
 </body>
+
 </html>
 <script>
+    $(document).ready(function() {
+
+        function edit(data) {
+            console.log(data);
+            $.ajax({
+                url: '/edit',
+                type: 'post',
+                dataType: 'json',
+                data: {
+                    designation_id: data
+                },
+                success: function(json) {
+                    console.log(json);
+
+                }
+            });
+        }
+    });
+</script>

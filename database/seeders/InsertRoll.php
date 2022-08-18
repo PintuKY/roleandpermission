@@ -22,11 +22,11 @@ class InsertRoll extends Seeder
     public function run()
     {
 
-        // $arr = ['SuperAdmin','Admin','Employee','Student'];
-        $arr = ['SuperAdmin'];
+         $arr = ['Admin','Employee','Student'];
+        //$arr = ['SuperAdmin'];
         foreach($arr as $roll){
 
             Role::create(['name' => $roll]);
-        }       
+        }
     }
 }
